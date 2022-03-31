@@ -28,16 +28,18 @@ on: [push, delete]
 jobs:
   to_hairdater:
     runs-on: ubuntu-latest
-    steps:                                              # <-- must use actions/checkout before mirroring!
+    steps:                                              # <-- must use actions/checkout before mirroring
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - uses: salonlofts/repository-mirroring-action@v1.0.2+salonlofts.1
         with:
           target_repo_url:
-            ubuntu@code.hairdater.com:salonlofts-com.git
+            code.hairdater.com:salonlofts-com.git
           ssh_private_key:                              # <-- use 'secrets' to pass credential information.
             ${{ secrets.HAIRDATER_SSH_PRIVATE_KEY }}
+          ssh_username:
+            ubuntu
 
   to_codecommit:                                        # <-- different jobs are executed in parallel.
     runs-on: ubuntu-latest
