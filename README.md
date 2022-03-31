@@ -17,6 +17,8 @@ To find out how to create and add the `GITLAB_SSH_PRIVATE_KEY`, follow the steps
 2. Add the _public_ key to [your gitlab account](https://gitlab.com/-/profile/keys)
 3. Add the _private_ key as a secret to your workflow. More information on [creating and using secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets).
 
+Best practices for versioning a forked repo
+https://gofore.com/en/best-practices-for-forking-a-git-repo/#BestPracticesofforkinggitrepositoryandcontinuingdevelopment-Howyoushoulddoversioning?
 
 ```yaml
 name: Mirroring
@@ -24,18 +26,18 @@ name: Mirroring
 on: [push, delete]
 
 jobs:
-  to_gitlab:
+  to_hairdater:
     runs-on: ubuntu-latest
     steps:                                              # <-- must use actions/checkout before mirroring!
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: pixta-dev/repository-mirroring-action@v1
+      - uses: salonlofts/repository-mirroring-action@v1.0.2+salonlofts.1
         with:
           target_repo_url:
-            git@gitlab.com:<username>/<target_repository_name>.git
+            ubuntu@code.hairdater.com:salonlofts-com.git
           ssh_private_key:                              # <-- use 'secrets' to pass credential information.
-            ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
+            ${{ secrets.HAIRDATER_SSH_PRIVATE_KEY }}
 
   to_codecommit:                                        # <-- different jobs are executed in parallel.
     runs-on: ubuntu-latest
@@ -43,10 +45,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: pixta-dev/repository-mirroring-action@v1
+      - uses: salonlofts/repository-mirroring-action@v1.0.2+salonlofts.1
         with:
           target_repo_url:
-            ssh://git-codecommit.<somewhere>.amazonaws.com/v1/repos/<target_repository_name>
+            ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/salonlofts-com
           ssh_private_key:
             ${{ secrets.CODECOMMIT_SSH_PRIVATE_KEY }}
           ssh_username:                                 # <-- (for codecommit) you need to specify ssh-key-id as ssh username.
